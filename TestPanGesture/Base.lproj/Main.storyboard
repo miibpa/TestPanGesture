@@ -1,24 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TestPanGesture" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TKA-3a-tx1">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZOM-cC-Kek">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5om-Sr-f5R">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                                <connections>
+                                                    <action selector="firstViewTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="enY-b3-Lp8"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                        <constraints>
+                                            <constraint firstItem="5om-Sr-f5R" firstAttribute="top" secondItem="ZOM-cC-Kek" secondAttribute="top" id="KEQ-8N-78I"/>
+                                            <constraint firstAttribute="trailing" secondItem="5om-Sr-f5R" secondAttribute="trailing" id="hH6-gL-2dO"/>
+                                            <constraint firstItem="5om-Sr-f5R" firstAttribute="leading" secondItem="ZOM-cC-Kek" secondAttribute="leading" id="jJc-GZ-ZV8"/>
+                                            <constraint firstAttribute="height" constant="100" id="kbz-Hn-dRu"/>
+                                            <constraint firstAttribute="bottom" secondItem="5om-Sr-f5R" secondAttribute="bottom" id="pCJ-7C-l4I"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdo-By-iPO">
+                                        <rect key="frame" x="0.0" y="100" width="414" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ArY-HS-Kfx">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                                <connections>
+                                                    <action selector="secondViewTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cAb-Mx-E88"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="DUy-G8-BMN"/>
+                                            <constraint firstAttribute="bottom" secondItem="ArY-HS-Kfx" secondAttribute="bottom" id="HCa-LK-Umo"/>
+                                            <constraint firstItem="ArY-HS-Kfx" firstAttribute="leading" secondItem="wdo-By-iPO" secondAttribute="leading" id="U33-A2-7Id"/>
+                                            <constraint firstAttribute="trailing" secondItem="ArY-HS-Kfx" secondAttribute="trailing" id="kxj-Da-bK1"/>
+                                            <constraint firstItem="ArY-HS-Kfx" firstAttribute="top" secondItem="wdo-By-iPO" secondAttribute="top" id="wFj-EH-ndC"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tdb-L7-vnK">
+                                        <rect key="frame" x="0.0" y="200" width="414" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XAu-er-iMM">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                                <connections>
+                                                    <action selector="thridViewTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bPW-d0-OzX"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                        <constraints>
+                                            <constraint firstItem="XAu-er-iMM" firstAttribute="top" secondItem="Tdb-L7-vnK" secondAttribute="top" id="021-8i-Cdg"/>
+                                            <constraint firstAttribute="bottom" secondItem="XAu-er-iMM" secondAttribute="bottom" id="PIF-fE-DuW"/>
+                                            <constraint firstItem="XAu-er-iMM" firstAttribute="leading" secondItem="Tdb-L7-vnK" secondAttribute="leading" id="eAA-iA-BNV"/>
+                                            <constraint firstAttribute="trailing" secondItem="XAu-er-iMM" secondAttribute="trailing" id="exn-GK-oUy"/>
+                                            <constraint firstAttribute="height" constant="100" id="w8b-iP-PJf"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="wdo-By-iPO" secondAttribute="trailing" id="4SL-2P-FE3"/>
+                                    <constraint firstItem="Tdb-L7-vnK" firstAttribute="top" secondItem="wdo-By-iPO" secondAttribute="bottom" id="7U9-f4-PDN"/>
+                                    <constraint firstItem="ZOM-cC-Kek" firstAttribute="leading" secondItem="TKA-3a-tx1" secondAttribute="leading" id="Ef9-S1-xO0"/>
+                                    <constraint firstItem="ZOM-cC-Kek" firstAttribute="top" secondItem="TKA-3a-tx1" secondAttribute="top" id="FIN-vw-gkq"/>
+                                    <constraint firstItem="wdo-By-iPO" firstAttribute="leading" secondItem="TKA-3a-tx1" secondAttribute="leading" id="OUx-WP-BIa"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tdb-L7-vnK" secondAttribute="trailing" id="UsQ-KM-KTC"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZOM-cC-Kek" secondAttribute="trailing" id="cGl-GM-dCV"/>
+                                    <constraint firstItem="Tdb-L7-vnK" firstAttribute="leading" secondItem="TKA-3a-tx1" secondAttribute="leading" id="inl-Uc-MXq"/>
+                                    <constraint firstItem="wdo-By-iPO" firstAttribute="top" secondItem="ZOM-cC-Kek" secondAttribute="bottom" id="mGT-51-Ngs"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="TKA-3a-tx1" secondAttribute="trailing" id="dqb-zQ-4Yz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="TKA-3a-tx1" secondAttribute="bottom" id="jBK-hD-nFv"/>
+                            <constraint firstItem="TKA-3a-tx1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kLt-6C-gDC"/>
+                            <constraint firstItem="TKA-3a-tx1" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="w51-iG-CUS"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="tTL-cb-Uco" appends="YES" id="3w9-4X-h4l"/>
+                        </connections>
                     </view>
+                    <connections>
+                        <outlet property="firstView" destination="ZOM-cC-Kek" id="l8r-wF-NHp"/>
+                        <outlet property="firstViewHeightConstrint" destination="kbz-Hn-dRu" id="pLt-vd-BJM"/>
+                        <outlet property="secondView" destination="wdo-By-iPO" id="cED-aI-MIo"/>
+                        <outlet property="secondViewHeightConstrint" destination="DUy-G8-BMN" id="KVK-c4-8wt"/>
+                        <outlet property="stackView" destination="TKA-3a-tx1" id="PRh-sZ-PYW"/>
+                        <outlet property="thirdView" destination="Tdb-L7-vnK" id="Ssf-eI-FQw"/>
+                        <outlet property="thirdViewHeightConstraint" destination="w8b-iP-PJf" id="J1j-oc-e9C"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="tTL-cb-Uco">
+                    <connections>
+                        <action selector="handlePan:" destination="BYZ-38-t0r" id="Z6v-yV-nbi"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="-43" y="94"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

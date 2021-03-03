@@ -7,139 +7,125 @@
 
 import UIKit
 
+let viewHeigth: CGFloat = 100
+
 class ViewController: UIViewController {
-    @IBOutlet weak var firstView: UIView!
-    @IBOutlet weak var secondView: UIView!
-    @IBOutlet weak var thirdView: UIView!
-    @IBOutlet weak var stackView: UIView!
+    @IBOutlet private weak var firstView: UIView!
+    @IBOutlet private weak var secondView: UIView!
+    @IBOutlet private weak var thirdView: UIView!
+    @IBOutlet private weak var stackView: UIView!
     
-    @IBOutlet weak var firstViewHeightConstrint: NSLayoutConstraint!
-    @IBOutlet weak var secondViewHeightConstrint: NSLayoutConstraint!
-    @IBOutlet weak var thirdViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var firstViewHeightConstrint: NSLayoutConstraint!
+    @IBOutlet private weak var secondViewHeightConstrint: NSLayoutConstraint!
+    @IBOutlet private weak var thirdViewHeightConstraint: NSLayoutConstraint!
     
     private var selectedView: SelectedView? = nil {
-        didSet {
-            compactView()
-        }
+        didSet { compactView() }
     }
     
     var isViewCompact = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
-        // 1
-        
-        
         let translation = gesture.translation(in: stackView)
         
         if translation.y < 0 && isViewCompact { return }
-        
         if translation.y > 0 && !isViewCompact { return }
         
-        let translationY = translation.y / 2
+        let translationY = translation.y / 2 //divide this to make expansion/compact smoother
         
-        var heigthConstraint: CGFloat {
-            switch translationY > 0 {
-            case true:
-                return translationY
-            case false:
-                return 100 + translationY
-            }
-        }
-        print(heigthConstraint)
         if gesture.state == .ended {
-            if abs(translationY) > 30 {
+            let velocity = abs(gesture.velocity(in: stackView).y / 2)
+            
+            if abs(translationY) > viewHeigth / 3 {
                 switch translationY > 0 {
                 case true:
-                    expandView()
+                    expandView(velocity: velocity)
                 case false:
-                    compactView()
+                    compactView(velocity: velocity)
                 }
             } else {
                 switch translationY > 0 {
                 case true:
-                    compactView()
+                    compactView(velocity: velocity)
                 case false:
-                    expandView()
+                    expandView(velocity: velocity)
                 }
             }
             return
         }
-
-        guard heigthConstraint < 100 else {
+        
+        let heigthConstraint = translationY > 0 ? translationY : viewHeigth + translationY
+        guard heigthConstraint < viewHeigth else {
             return
         }
-        
-        switch selectedView {
-        case .first:
-            secondViewHeightConstrint.constant = heigthConstraint
-            secondView.alpha = heigthConstraint / 100
-            thirdViewHeightConstraint.constant = heigthConstraint
-            thirdView.alpha = heigthConstraint / 100
-            self.view.layoutIfNeeded()
-        case .second:
-            firstViewHeightConstrint.constant = heigthConstraint
-            firstView.alpha = heigthConstraint / 100
-            thirdViewHeightConstraint.constant = heigthConstraint
-            thirdView.alpha = heigthConstraint / 100
-            self.view.layoutIfNeeded()
-        case .third:
-            firstViewHeightConstrint.constant = heigthConstraint
-            firstView.alpha = heigthConstraint / 100
-            secondViewHeightConstrint.constant = heigthConstraint
-            secondView.alpha = heigthConstraint / 100
-            self.view.layoutIfNeeded()
-        case .none:
-            return
-        }
-        
-    }
-    
-    @IBAction func firstViewTapped(_ sender: Any) {
-        selectedView = .first
-    }
-    
-    @IBAction func secondViewTapped(_ sender: Any) {
-        selectedView = .second
-    }
-    
-    @IBAction func thridViewTapped(_ sender: Any) {
-        selectedView = .third
+        redrawViews(heigth: heigthConstraint)
     }
 }
 
 private extension ViewController {
-    func compactView() {
-        guard let selectedView = selectedView else { return }
-         isViewCompact = true
+    @IBAction func firstViewTapped(_ sender: Any) { selectedView = .first }
+    
+    @IBAction func secondViewTapped(_ sender: Any) { selectedView = .second }
+    
+    @IBAction func thridViewTapped(_ sender: Any) { selectedView = .third }
+    
+    func redrawViews(heigth: CGFloat) {
+        let alpha = heigth / viewHeigth
+        
         switch selectedView {
         case .first:
-            hideView(view: secondView, constraint: secondViewHeightConstrint)
-            hideView(view: thirdView, constraint: thirdViewHeightConstraint)
+            secondViewHeightConstrint.constant = heigth
+            secondView.alpha = alpha
+            thirdViewHeightConstraint.constant = heigth
+            thirdView.alpha = alpha
+            self.view.layoutIfNeeded()
         case .second:
-            hideView(view: firstView, constraint: firstViewHeightConstrint)
-            hideView(view: thirdView, constraint: thirdViewHeightConstraint)
+            firstViewHeightConstrint.constant = heigth
+            firstView.alpha = alpha
+            thirdViewHeightConstraint.constant = heigth
+            thirdView.alpha = alpha
+            self.view.layoutIfNeeded()
         case .third:
-            hideView(view: firstView, constraint: firstViewHeightConstrint)
-            hideView(view: secondView, constraint: secondViewHeightConstrint)
+            firstViewHeightConstrint.constant = heigth
+            firstView.alpha = alpha
+            secondViewHeightConstrint.constant = heigth
+            secondView.alpha = alpha
+            self.view.layoutIfNeeded()
+        case .none:
+            return
         }
-        
-        
     }
     
-    func expandView() {
+    func compactView(velocity: CGFloat = 200) {
+        guard let selectedView = selectedView else { return }
+        isViewCompact = true
+        switch selectedView {
+        case .first:
+            hideView(view: secondView, constraint: secondViewHeightConstrint, velocity: velocity)
+            hideView(view: thirdView, constraint: thirdViewHeightConstraint, velocity: velocity)
+        case .second:
+            hideView(view: firstView, constraint: firstViewHeightConstrint, velocity: velocity)
+            hideView(view: thirdView, constraint: thirdViewHeightConstraint, velocity: velocity)
+        case .third:
+            hideView(view: firstView, constraint: firstViewHeightConstrint, velocity: velocity)
+            hideView(view: secondView, constraint: secondViewHeightConstrint, velocity: velocity)
+        }
+    }
+    
+    func expandView(velocity: CGFloat = 200) {
         isViewCompact = false
-        showView(view: firstView, constraint: firstViewHeightConstrint)
-        showView(view: secondView, constraint: secondViewHeightConstrint)
-        showView(view: thirdView, constraint: thirdViewHeightConstraint)
+        showView(view: firstView, constraint: firstViewHeightConstrint, velocity: velocity)
+        showView(view: secondView, constraint: secondViewHeightConstrint, velocity: velocity)
+        showView(view: thirdView, constraint: thirdViewHeightConstraint, velocity: velocity)
     }
     
-    func hideView(view: UIView, constraint: NSLayoutConstraint) {
-        let duration = constraint.constant / 100 * 0.5
+    func hideView(view: UIView, constraint: NSLayoutConstraint, velocity: CGFloat) {
+        let duration = min(constraint.constant / velocity, 0.5)
+        
         UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseOut]) {
             constraint.constant = 0
             view.alpha = 0
@@ -147,10 +133,12 @@ private extension ViewController {
         }
     }
     
-    func showView(view: UIView, constraint: NSLayoutConstraint) {
-        let duration = (100 - constraint.constant) / 100 * 0.5
+    func showView(view: UIView, constraint: NSLayoutConstraint, velocity: CGFloat) {
+        let duration = min((viewHeigth - constraint.constant) / velocity, 0.5)
+        
+        print(duration)
         UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseIn]) {
-            constraint.constant = 100
+            constraint.constant = viewHeigth
             view.alpha = 1
             self.view.layoutIfNeeded()
         }

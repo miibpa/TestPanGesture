@@ -7,7 +7,7 @@
 
 import UIKit
 
-let viewHeigth: CGFloat = 100
+let viewHeight: CGFloat = 100
 
 class ViewController: UIViewController {
     @IBOutlet private weak var firstView: UIView!
@@ -38,9 +38,9 @@ class ViewController: UIViewController {
         let translationY = translation.y / 2 //divide this to make expansion/compact smoother
         
         if gesture.state == .ended {
-            let velocity = abs(gesture.velocity(in: stackView).y / 2)
+            let velocity = abs(gesture.velocity(in: stackView).y / 2) //smooth the velocity also
             
-            if abs(translationY) > viewHeigth / 3 {
+            if abs(translationY) > viewHeight / 3 {
                 switch translationY > 0 {
                 case true:
                     expandView(velocity: velocity)
@@ -58,8 +58,8 @@ class ViewController: UIViewController {
             return
         }
         
-        let heigthConstraint = translationY > 0 ? translationY : viewHeigth + translationY
-        guard heigthConstraint < viewHeigth else {
+        let heigthConstraint = translationY > 0 ? translationY : viewHeight + translationY
+        guard heigthConstraint < viewHeight else {
             return
         }
         redrawViews(heigth: heigthConstraint)
@@ -74,7 +74,7 @@ private extension ViewController {
     @IBAction func thridViewTapped(_ sender: Any) { selectedView = .third }
     
     func redrawViews(heigth: CGFloat) {
-        let alpha = heigth / viewHeigth
+        let alpha = heigth / viewHeight
         
         switch selectedView {
         case .first:
@@ -124,24 +124,47 @@ private extension ViewController {
     }
     
     func hideView(view: UIView, constraint: NSLayoutConstraint, velocity: CGFloat) {
-        let duration = min(constraint.constant / velocity, 0.5)
+        let duration = min(constraint.constant / velocity, 0.5) //calculate the animation duration based on the distance left (current view height) and pan velocity
         
-        UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseOut]) {
-            constraint.constant = 0
-            view.alpha = 0
-            self.view.layoutIfNeeded()
-        }
+        //        UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseOut]) {
+        //            constraint.constant = 0
+        //            view.alpha = 0
+        //            self.view.layoutIfNeeded()
+        //        }
+        
+        let normalizedVelocity = velocity / viewHeight
+        
+        UIView.animate(withDuration: 0.5,
+                       delay: 0.0, usingSpringWithDamping: 0.9,
+                       initialSpringVelocity: normalizedVelocity,
+                       options: .curveEaseOut,
+                       animations: {
+                        constraint.constant = 0
+                        view.alpha = 0
+                        self.view.layoutIfNeeded()
+                       }, completion: nil)
     }
     
     func showView(view: UIView, constraint: NSLayoutConstraint, velocity: CGFloat) {
-        let duration = min((viewHeigth - constraint.constant) / velocity, 0.5)
+        let duration = min((viewHeight - constraint.constant) / velocity, 0.5) //calculate the animation duration based on the distance left (current view height) and pan velocity
         
-        print(duration)
-        UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseIn]) {
-            constraint.constant = viewHeigth
-            view.alpha = 1
-            self.view.layoutIfNeeded()
-        }
+        //        UIView.animate(withDuration: Double(duration), delay: 0.0, options: [.curveEaseIn]) {
+        //            constraint.constant = viewHeigth
+        //            view.alpha = 1
+        //            self.view.layoutIfNeeded()
+        //        }
+        
+        let normalizedVelocity = velocity / viewHeight
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0,
+                       usingSpringWithDamping: 0.9,
+                       initialSpringVelocity: normalizedVelocity,
+                       options: .curveEaseIn,
+                       animations: {
+                        constraint.constant = viewHeight
+                        view.alpha = 1
+                        self.view.layoutIfNeeded()
+                       }, completion: nil)
     }
 }
 

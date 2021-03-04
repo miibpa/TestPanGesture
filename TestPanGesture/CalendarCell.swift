@@ -17,7 +17,7 @@ class CalendarCell: UICollectionViewCell {
     func configure(with date: Date, isSelectable: Bool) {
         numberLabel.text = String(date.dayNumber)
         dayLabel.text = date.isToday
-            ? NSLocalizedString("all_today", comment: "").uppercased()
+            ? "Hoy"
             : date.weekdayShortName.uppercased()
         
         switch (isSelected, isSelectable) {
@@ -32,44 +32,50 @@ class CalendarCell: UICollectionViewCell {
         if date.isToday {
             asToday()
         }
-        accessibilityIdentifier =  AccessibilityIdentifier.Delivery.calendarCell
     }
     
     private func configureView() {
-        numberLabel.font = .semibold18
-        dayLabel.font = .semibold11
-        todayIndicatorView.backgroundColor = .tomato100
+        numberLabel.font = UIFont.scaledFont(ofSize: 18, weight: .semibold)
+        dayLabel.font = UIFont.scaledFont(ofSize: 11, weight: .semibold)
+        todayIndicatorView.backgroundColor = .red
     }
     
     private func asSelected() {
-        numberLabel.textColor = .white100
-        dayLabel.textColor = .white100
+        numberLabel.textColor = .white
+        dayLabel.textColor = .white
         todayIndicatorView.isHidden = true
-        backgroundColor = .cucumber100
+        backgroundColor = .green
         isUserInteractionEnabled = false
     }
     
     private func asSelectable() {
-        numberLabel.textColor = .black100
-        dayLabel.textColor = .black100
+        numberLabel.textColor = .black
+        dayLabel.textColor = .black
         todayIndicatorView.isHidden = true
-        backgroundColor = .white100
+        backgroundColor = .white
         isUserInteractionEnabled = true
     }
     
     private func asNotSelectable() {
-        numberLabel.textColor = .smoked40
-        dayLabel.textColor = .smoked40
+        numberLabel.textColor = .gray
+        dayLabel.textColor = .gray
         todayIndicatorView.isHidden = true
-        backgroundColor = .white100
+        backgroundColor = .white
         isUserInteractionEnabled = false
     }
     
     private func asToday() {
-        numberLabel.textColor = .black100
-        dayLabel.textColor = .black100
+        numberLabel.textColor = .black
+        dayLabel.textColor = .black
         todayIndicatorView.isHidden = false
-        backgroundColor = .whiteCreamLight
+        backgroundColor = .white
         isUserInteractionEnabled = false
+    }
+}
+
+extension UIFont {
+    static func scaledFont(ofSize size: CGFloat, weight: UIFont.Weight) -> UIFont {
+        let font = UIFont.systemFont(ofSize: size, weight: weight)
+        return UIFontMetrics.default.scaledFont(for: font)
     }
 }

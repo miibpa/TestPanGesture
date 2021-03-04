@@ -13,6 +13,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //let view = CalendarView()
-        self.view.addSubview(CalendarView())
+        //self.view.addSubview(CalendarView())
     }
 }

@@ -24,11 +24,11 @@ class CalendarWeekView: UIView {
         configureView()
     }
     
-    override func layoutSubviews() {
-        let height: CGFloat = (bounds.width - 32 - 36) / 7
-        collectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
-        collectionView.layoutIfNeeded()
-    }
+//    override func layoutSubviews() {
+//        collectionView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+//
+//        collectionView.layoutIfNeeded()
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -72,7 +72,7 @@ class CalendarWeekView: UIView {
         collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         collectionView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
+        collectionView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         collectionView.registerNibCell(CalendarCell.self)
     }
 }
@@ -107,6 +107,6 @@ extension CalendarWeekView: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = collectionView.frame.height
-        return CGSize(width: size, height: size)
+        return CGSize(width: 49, height: 60)
     }
 }

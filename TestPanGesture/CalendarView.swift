@@ -5,7 +5,7 @@ protocol CalendarViewDelegate: class {
     func calendarView(_ view: CalendarView, didSelectDate date: Date)
 }
 
-class CalendarView: UIView {
+class CalendarView: UIStackView {
     private lazy var firstWeekCollectionView: CalendarWeekView = {
         return CalendarWeekView()
     }()
@@ -21,17 +21,6 @@ class CalendarView: UIView {
     private var firstWeekCollectionViewHeightConstraint: NSLayoutConstraint?
     private var secondWeekCollectionViewHeightConstraint: NSLayoutConstraint?
     private var thirdWeekCollectionViewHeightConstraint: NSLayoutConstraint?
-    
-    private lazy var calendarStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.addArrangedSubview(firstWeekCollectionView)
-        stackView.addArrangedSubview(secondWeekCollectionView)
-        stackView.addArrangedSubview(thirdWeekCollectionView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
-        return stackView
-    }()
     
     private var dates: [Date] = []
     private var availableDates: [Date] = []
@@ -51,24 +40,8 @@ class CalendarView: UIView {
         configureView()
     }
     
-    override func layoutSubviews() {
-        let height: CGFloat = (bounds.width - 32 - 36) / 7
-        weekCollectionViewHeight = height
-        firstWeekCollectionViewHeightConstraint = firstWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
-        secondWeekCollectionViewHeightConstraint = secondWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
-        thirdWeekCollectionViewHeightConstraint = thirdWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
-        
-        firstWeekCollectionViewHeightConstraint?.isActive = true
-        secondWeekCollectionViewHeightConstraint?.isActive = true
-        thirdWeekCollectionViewHeightConstraint?.isActive = true
-        
-        firstWeekCollectionView.layoutIfNeeded()
-        secondWeekCollectionView.layoutIfNeeded()
-        thirdWeekCollectionView.layoutIfNeeded()
-        
-    }
     
-    required init?(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         configureView()
     }
@@ -91,16 +64,38 @@ class CalendarView: UIView {
     }
     
     private func configureView() {
-        addSubview(calendarStackView)
-        calendarStackView.translatesAutoresizingMaskIntoConstraints = false
-        calendarStackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        calendarStackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        calendarStackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        axis = .vertical
+        firstWeekCollectionView.backgroundColor = .red
+        secondWeekCollectionView.backgroundColor = .blue
+        thirdWeekCollectionView.backgroundColor = .orange
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        let height: CGFloat = 60
+        weekCollectionViewHeight = height
+        firstWeekCollectionViewHeightConstraint = firstWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
+        secondWeekCollectionViewHeightConstraint = secondWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
+        thirdWeekCollectionViewHeightConstraint = thirdWeekCollectionView.heightAnchor.constraint(equalToConstant: height)
+        
+        firstWeekCollectionViewHeightConstraint?.isActive = true
+        secondWeekCollectionViewHeightConstraint?.isActive = true
+        thirdWeekCollectionViewHeightConstraint?.isActive = true
+        
+        addArrangedSubview(firstWeekCollectionView)
+        addArrangedSubview(secondWeekCollectionView)
+        addArrangedSubview(thirdWeekCollectionView)
+//        addSubview(calendarStackView)
+//        calendarStackView.translatesAutoresizingMaskIntoConstraints = false
+//        calendarStackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+//        calendarStackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+//        calendarStackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         firstWeekCollectionView.delegate = self
         secondWeekCollectionView.delegate = self
         thirdWeekCollectionView.delegate = self
         
         configureDates()
+        
+        
     }
     
     private func configureDates() {
@@ -158,6 +153,7 @@ private extension CalendarView {
                        animations: {
                         constraint.constant = 0
                         view.alpha = 0
+                        //view.layoutIfNeeded()
                         self.layoutIfNeeded()
                        }, completion: nil)
     }
@@ -182,6 +178,7 @@ private extension CalendarView {
                        animations: {
                         constraint.constant = self.weekCollectionViewHeight
                         view.alpha = 1
+                        //view.layoutIfNeeded()
                         self.layoutIfNeeded()
                        }, completion: nil)
     }
@@ -193,7 +190,7 @@ private extension CalendarView {
         if translation.y > 0 && !isViewCompact { return }
         
         let translationY = translation.y / 2 //divide this to make expansion/compact smoother
-        
+        print(translationY)
         if gesture.state == .ended {
             let velocity = abs(gesture.velocity(in: self).y / 2) //smooth the velocity also
             
@@ -230,20 +227,17 @@ private extension CalendarView {
             secondWeekCollectionViewHeightConstraint?.constant = heigth
             secondWeekCollectionView.alpha = alpha
             thirdWeekCollectionViewHeightConstraint?.constant = heigth
-            thirdWeekCollectionView.alpha = alpha
-            layoutIfNeeded()
+            thirdWeekCollectionView.alpha = alpha           
         case .second:
             firstWeekCollectionViewHeightConstraint?.constant = heigth
             firstWeekCollectionView.alpha = alpha
             thirdWeekCollectionViewHeightConstraint?.constant = heigth
             thirdWeekCollectionView.alpha = alpha
-            layoutIfNeeded()
         case .third:
             firstWeekCollectionViewHeightConstraint?.constant = heigth
             firstWeekCollectionView.alpha = alpha
             secondWeekCollectionViewHeightConstraint?.constant = heigth
             secondWeekCollectionView.alpha = alpha
-            layoutIfNeeded()
         case .none:
             return
         }
